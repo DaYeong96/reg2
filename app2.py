@@ -25,8 +25,8 @@ def user_input_features() :
     room =st.sidebar.number_input("방수: ")
     age = st.sidebar.number_input("연수: ")
     pop = st.sidebar.number_input("유동인구수: ")
-    road = st.sidebar.number_input("고속도로: ")
-    mange = st.sidebar.number_input("관리비: ")
+    road = int(st.sidebar.number_input("고속도로: "))
+    mange = int(st.sidebar.number_input("관리비: "))
     kid = st.sidebar.number_input("아이들비중: ")
   
     data = {'dist' : [dist],
