@@ -51,9 +51,9 @@ st.title('렌탈료 예측 서비스')
 st.markdown('* 우측에 데이터를 입력해주세요')
 
 
-ohe_station = joblib.load("ohe_station.pkl")
-scaler_call = joblib.load("scaler.pkl")
-model_call = joblib.load("model.pkl")
+# ohe_station = joblib.load("ohe_station.pkl")
+# scaler_call = joblib.load("scaler.pkl")
+# model_call = joblib.load("model.pkl")
 
 
 new_x_df = user_input_features()
@@ -62,27 +62,37 @@ st.write(new_x_df)
 #st.write(new_x_df['station'].dtype) 
 
 
-# from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder
 
-# ohe = OneHotEncoder(sparse=False)
-# data_cat2 = ohe.fit_transform(new_x_df[['station']])
-
-
-data_cat2 = ohe_station.transform(new_x_df[['station']])
-data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
-
-# data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe.categories_[0]])], axis=1)
+ohe = OneHotEncoder(sparse=False)
+data_cat2 = ohe.fit_transform(new_x_df[['station']])
 
 
+# data_cat2 = ohe_station.transform(new_x_df[['station']])
+# data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
+
+data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe.categories_[0]])], axis=1)
 
 
-# from sklearn.preprocessing import MinMaxScaler
-
-# scaler = MinMaxScaler()
-# data_con_scale = scaler.fit_transform(data_concat) 
 
 
-data_con_scale = scaler_call.transform(data_concat)
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+data_con_scale = scaler.fit_transform(data_concat) 
+
+
+#data_con_scale = scaler_call.transform(data_concat)
+
+
+from sklearn.linear_model import LinearRegression
+model_scale = LinearRegression()
+model_scale.fit(data_concat.drop(columns=['station']), data_concat[['station]])
+
+result = model_call.predict(data_con_scale) 
+
+
+
 result = model_call.predict(data_con_scale) 
 
 #예측결과를 화면에 뿌려준다. 
