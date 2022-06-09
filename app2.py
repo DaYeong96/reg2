@@ -51,8 +51,8 @@ st.title('렌탈료 예측 서비스')
 st.markdown('* 우측에 데이터를 입력해주세요')
 
 
-ohe_station = joblib.load("ohe_station.pkl")
-scaler_call = joblib.load("scaler.pkl")
+# ohe_station = joblib.load("ohe_station.pkl")
+# scaler_call = joblib.load("scaler.pkl")
 model_call = joblib.load("model.pkl")
 
 
@@ -76,7 +76,12 @@ data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_ca
 
 
 
-data_con_scale = scaler_call.transform(data_concat)
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+data_con_scale = scaler.fit_transform(data_concat) 
+
+
 result = model_call.predict(data_con_scale) 
 
 #예측결과를 화면에 뿌려준다. 
