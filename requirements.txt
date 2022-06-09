@@ -8,15 +8,3 @@ ptyprocess
 seaborn
 streamlit
 scikit-learn
-OneHotEncoder
-train_test_split
-MinMaxScaler
-LinearRegression
-
-
-
-
-
-
-
-
