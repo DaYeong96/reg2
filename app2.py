@@ -19,7 +19,7 @@ def user_input_features() :
 #              "역근처 여부: ", 
 #               (0,1)))
 
-    station =int(st.sidebar.radio("역근처 여부: ", (0,1)))
+    station =int(st.sidebar.radio("역근처 여부: ", ('0'','1')))
 
     co2 = st.sidebar.number_input("일산화탄소양: ")
     room =st.sidebar.number_input("방수: ")
@@ -67,5 +67,8 @@ data_con_scale = scaler_call.transform(data_concat)
 result = model_call.predict(data_con_scale) 
 
 #예측결과를 화면에 뿌려준다. 
+st.title(' ')
 st.subheader('결과는 다음과 같습니다.')
 st.write('예상되는 렌탈료:', result[0])
+
+
