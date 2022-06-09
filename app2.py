@@ -15,7 +15,7 @@ def user_input_features() :
     #station =st.sidebar.number_input("역근처여부: ")
     station =float(st.sidebar.radio(
              "역근처 여부: ", 
-              ('0','1')))
+              (0,1)))
     co2 = st.sidebar.number_input("일산화탄소양: ")
     room =st.sidebar.number_input("방수: ")
     age = st.sidebar.number_input("연수: ")
