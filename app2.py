@@ -7,6 +7,7 @@ import pandas as pd
 
 # st를 이용하여 타이틀과 입력 방법을 명시한다.
 
+
 def user_input_features() :
     dist = st.sidebar.number_input("거리: ")
     #office =st.sidebar.number_input("오피스비중: ")
@@ -18,9 +19,6 @@ def user_input_features() :
 #     station =float(st.sidebar.radio(
 #              "역근처 여부: ", 
 #               (0,1)))
-
-    station =int(st.sidebar.radio("역근처 여부: ", ('0','1')))
-
     co2 = st.sidebar.number_input("일산화탄소양: ")
     room =st.sidebar.number_input("방수: ")
     age = st.sidebar.number_input("연수: ")
@@ -28,18 +26,20 @@ def user_input_features() :
     road = st.sidebar.slider("고속도로: ", 0,30)
     mange = st.sidebar.slider("관리비: ", 100, 800)
     kid = st.sidebar.number_input("아이들비중: ")
+    station =int(st.sidebar.radio("역근처 여부: ", ('0','1')))
+
   
     data = {'dist' : [dist],
             'office' : [office],
             'home' : [home],
-            'station' : [station],
             'co2' : [co2],
             'room' : [room],
             'age' : [age],
             'pop' : [pop],
             'road' : [road],
             'mange' : [mange],
-            'kid' : [kid]
+            'kid' : [kid],
+            'station' : [station]
             }
     data_df = pd.DataFrame(data, index=[0])
     return data_df
@@ -51,8 +51,8 @@ st.title('렌탈료 예측 서비스')
 st.markdown('* 우측에 데이터를 입력해주세요')
 
 
-# ohe_station = joblib.load("ohe_station.pkl")
-# scaler_call = joblib.load("scaler.pkl")
+ohe_station = joblib.load("ohe_station.pkl")
+scaler_call = joblib.load("scaler.pkl")
 model_call = joblib.load("model.pkl")
 
 
@@ -62,26 +62,27 @@ st.write(new_x_df)
 #st.write(new_x_df['station'].dtype) 
 
 
-from sklearn.preprocessing import OneHotEncoder
+# from sklearn.preprocessing import OneHotEncoder
 
-ohe = OneHotEncoder(sparse=False)
-data_cat2 = ohe.fit_transform(new_x_df[['station']])
-
-
-# data_cat2 = ohe_station.transform(new_x_df[['station']])
-#data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
-
-data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe.categories_[0]])], axis=1)
+# ohe = OneHotEncoder(sparse=False)
+# data_cat2 = ohe.fit_transform(new_x_df[['station']])
 
 
+data_cat2 = ohe_station.transform(new_x_df[['station']])
+data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
+
+# data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe.categories_[0]])], axis=1)
 
 
-from sklearn.preprocessing import MinMaxScaler
-
-scaler = MinMaxScaler()
-data_con_scale = scaler.fit_transform(data_concat) 
 
 
+# from sklearn.preprocessing import MinMaxScaler
+
+# scaler = MinMaxScaler()
+# data_con_scale = scaler.fit_transform(data_concat) 
+
+
+data_con_scale = scaler_call.transform(data_concat)
 result = model_call.predict(data_con_scale) 
 
 #예측결과를 화면에 뿌려준다. 
