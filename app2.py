@@ -11,11 +11,16 @@ def user_input_features() :
     dist = st.sidebar.number_input("거리: ")
     #office =st.sidebar.number_input("오피스비중: ")
     office = st.sidebar.slider("오피스비중: ", 0,100)
-    home = int(st.sidebar.number_input("홈비중: "))
+    home = st.sidebar.number_input("홈비중: ")
+    
+   # home = int(st.sidebar.number_input("홈비중: "))
     #station =st.sidebar.number_input("역근처여부: ")
-    station =float(st.sidebar.radio(
-             "역근처 여부: ", 
-              (0,1)))
+#     station =float(st.sidebar.radio(
+#              "역근처 여부: ", 
+#               (0,1)))
+
+    station =st.sidebar.radio("역근처 여부: ", ('0','1')))
+
     co2 = st.sidebar.number_input("일산화탄소양: ")
     room =st.sidebar.number_input("방수: ")
     age = st.sidebar.number_input("연수: ")
@@ -55,7 +60,7 @@ new_x_df = user_input_features()
 
 st.write(new_x_df) 
 
-data_cat2 = ohe_station.transform(new_x_df['station'])
+data_cat2 = ohe_station.transform(new_x_df[['station']])
 data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
 
 data_con_scale = scaler_call.transform(data_concat)
