@@ -61,8 +61,17 @@ new_x_df = user_input_features()
 st.write(new_x_df) 
 st.write(new_x_df['station'].dtype) 
 
-data_cat2 = ohe_station.transform(new_x_df[['station']])
-data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
+
+from sklearn.preprocessing import OneHotEncoder
+
+ohe = OneHotEncoder(sparse=False)
+data_cat2 = ohe.fit_transform(new_x_df[['station']])
+
+
+
+
+# data_cat2 = ohe_station.transform(new_x_df[['station']])
+# data_concat = pd.concat([new_x_df.drop(columns=['station']),pd.DataFrame(data_cat2, columns=['station_' + str(col) for col in ohe_station.categories_[0]])], axis=1)
 
 data_con_scale = scaler_call.transform(data_concat)
 result = model_call.predict(data_con_scale) 
